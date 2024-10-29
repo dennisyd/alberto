@@ -2,6 +2,7 @@ import os
 from openpyxl import load_workbook
 import warnings
 from openpyxl.worksheet.datavalidation import DataValidation
+from openpyxl.styles import NamedStyle
 
 # Suppress warnings
 warnings.filterwarnings('ignore', category=UserWarning)
@@ -74,18 +75,7 @@ def process_excel_file(file_path):
                 sheet = wb[sheet_name]
                 print(f"Adding validations and formulas to sheet: {sheet_name} (will be renamed to {new_name})")
                 
-                # Create data validation for column E (VSAT validation)
-                dv_e = DataValidation(
-                    type="list",
-                    formula1="=INFO!$A$2:$A$23",
-                    allow_blank=True
-                )
-                dv_e.error = 'Your entry is not in the list'
-                dv_e.errorTitle = 'Invalid Entry'
-                dv_e.prompt = 'Please select a value from the list'
-                dv_e.promptTitle = 'Select a Value'
-                
-                # Create data validation for column F (same as column E)
+                # Create data validation for column F (VSAT validation)
                 dv_f = DataValidation(
                     type="list",
                     formula1="=INFO!$A$2:$A$23",
@@ -120,13 +110,11 @@ def process_excel_file(file_path):
                 
                 try:
                     # Add validation ranges
-                    dv_e.add('E9:E3024')
-                    dv_f.add('F9:F3024')
+                    dv_f.add('F9:F3020')
                     dv_l.add('L9:L3020')
                     dv_m.add('M9:M3020')
                     
                     # Add validations to the sheet
-                    sheet.add_data_validation(dv_e)
                     sheet.add_data_validation(dv_f)
                     sheet.add_data_validation(dv_l)
                     sheet.add_data_validation(dv_m)
@@ -139,6 +127,10 @@ def process_excel_file(file_path):
                     sheet['S7'] = '=INFO!E10'
                     sheet['T7'] = '=COUNTIF($L$9:$L$3020,S7)'
                     sheet['U7'] = '=SUMIFS($K$9:$K$3020,$L$9:$L$3020,S7)'
+
+		    # Format U7 as currency
+                    currency_format = NamedStyle(name='currency_style', number_format='$#,##0.00')
+                    sheet['U7'].style = currency_format
                     
                     print(f"All validations and formulas added to sheet successfully")
                     
