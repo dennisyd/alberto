@@ -35,7 +35,7 @@ def process_excel_file(file_path):
                     break
             
             if first_blank_row:
-                # Add VSAT in column A
+                # Add 'VSAT' in column A
                 ws[f'A{first_blank_row}'] = 'VSAT'
                 # Add specified text in column B
                 ws[f'B{first_blank_row}'] = '93923 x2/93040/95923/95924'
@@ -44,21 +44,21 @@ def process_excel_file(file_path):
             col_e_values = []
             last_row = ws.max_row
             
-            # Collect existing values in column E
-            for row in range(1, last_row + 1):
+            # Collect existing values in column E, starting from row 2 to skip the header
+            for row in range(2, last_row + 1):
                 val = ws[f'E{row}'].value
                 if val:
                     col_e_values.append(val)
             
-            # Add Finkelstein if not already present
+            # Add 'Finkelstein' if not already present
             if 'Finkelstein' not in col_e_values:
-                col_e_values.append('FINKELSTEIN')
+                col_e_values.append('Finkelstein')
             
             # Sort values
             col_e_values.sort()
             
-            # Write back sorted values
-            for idx, value in enumerate(col_e_values, 1):
+            # Write back sorted values, starting from row 2
+            for idx, value in enumerate(col_e_values, 2):
                 ws[f'E{idx}'] = value
             
             # Restore the sheet's hidden state if it was hidden
