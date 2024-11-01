@@ -87,38 +87,51 @@ def process_excel_file(file_path):
                 dv_f.prompt = 'Please select a value from the list'
                 dv_f.promptTitle = 'Select a Value'
                 
-                # Create data validation for column L (Reading Doctor validation)
+                # Create data validation for column L (Referring Doctors)
                 dv_l = DataValidation(
                     type="list",
-                    formula1="=INFO!$E$2:$E$10",
+                    formula1="=INFO!$F$2:$F$21",
                     allow_blank=True
                 )
                 dv_l.error = 'Your entry is not in the list'
                 dv_l.errorTitle = 'Invalid Entry'
-                dv_l.prompt = 'Please select a Reading Doctor'
-                dv_l.promptTitle = 'Select Doctor'
+                dv_l.prompt = 'Please select a Tech'
+                dv_l.promptTitle = 'Select Tech'
                 
-                # Create data validation for column M (Tech validation)
+                # Create data validation for column M (Reading Doctor validation)
                 dv_m = DataValidation(
                     type="list",
-                    formula1="=INFO!$D$2:$D$4",
+                    formula1="=INFO!$E$2:$E$10",
                     allow_blank=True
                 )
                 dv_m.error = 'Your entry is not in the list'
                 dv_m.errorTitle = 'Invalid Entry'
-                dv_m.prompt = 'Please select a Tech'
-                dv_m.promptTitle = 'Select Tech'
+                dv_m.prompt = 'Please select a Reading Doctor'
+                dv_m.promptTitle = 'Select Doctor'
                 
+                # Create data validation for column N (Tech validation)
+                dv_n = DataValidation(
+                    type="list",
+                    formula1="=INFO!$D$2:$D$4",
+                    allow_blank=True
+                )
+                dv_n.error = 'Your entry is not in the list'
+                dv_n.errorTitle = 'Invalid Entry'
+                dv_n.prompt = 'Please select a Tech'
+                dv_n.promptTitle = 'Select Tech'
+       
                 try:
                     # Add validation ranges
                     dv_f.add('F9:F3020')
                     dv_l.add('L9:L3020')
+                    dv_n.add('N9:N3020')
                     dv_m.add('M9:M3020')
                     
                     # Add validations to the sheet
                     sheet.add_data_validation(dv_f)
                     sheet.add_data_validation(dv_l)
                     sheet.add_data_validation(dv_m)
+                    sheet.add_data_validation(dv_n)
                     
                     # Add formulas to column G
                     for row in range(9, 3021):  # G9:G3020
@@ -171,7 +184,7 @@ def main():
     print(f"\nStarting Excel file processing in: {directory}\n")
     
     for filename in os.listdir(directory):
-        if filename.endswith('.xlsx') and 'Payments' not in filename:  # Only process .xlsx files
+        if filename.endswith('.xlsx') and 'Payments' in filename:  # Only process .xlsx files
             file_path = os.path.join(directory, filename)
             print(f"\nProcessing: {filename}")
             

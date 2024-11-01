@@ -2,6 +2,8 @@ import os
 import win32com.client
 import pythoncom
 import time
+win32com.client.gencache.EnsureDispatch('Excel.Application')
+
 
 def replace_formula_and_fill_down(file_path):
     try:
